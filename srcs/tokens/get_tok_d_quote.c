@@ -21,7 +21,8 @@ int				get_tok_d_quote(char *input, t_elem *elem,
 
 	len = 1;
 	current.str = elem->str;
-	while (len < (elem->size - (input[elem->size - 1] == '"')))
+	printf("%c\n", input[elem->size - 1]);
+	while (len <= (elem->size - 1 -(input[elem->size - 1] == '"')))
 	{
 		current.name = get_elem_name(&input[len], &current);
 		current.size = get_elem_size(&input[len], &current);

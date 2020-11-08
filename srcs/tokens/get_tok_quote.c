@@ -17,7 +17,8 @@ int			get_tok_quote(char *input, t_elem *elem,
 {
 	char	*str;
 
-	if (!(str = ft_substr(input + 1, 0, elem->size - 2)))
+	printf("%c\n", input[elem->size - 1]);
+	if (!(str = ft_substr(input + 1, 0, elem->size - 1 - (input[elem->size - 1] == '\''))))
 		return (ERROR);
 	if (!(append_token(tokens, str, elem_to_type[elem->name])))
 		return (ERROR);
