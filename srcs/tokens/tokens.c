@@ -29,6 +29,21 @@ void				ini_get_tok(int (*get_tok[12])(char *, t_elem *,
 	get_tok[none] = &get_tok_word;
 }
 
+void	display_tokens(t_token **tokens)
+{
+	t_token			*temp;
+	const char		*types[12] = {"pip", "in", "out", "append_out", "word",
+													"space", "v_env", "end"};
+	
+	temp = *tokens;
+	while (temp)
+	{
+		printf("str : \"%s\"    type : %s\n", temp->str, types[temp->type]);
+		temp = temp->next;
+	}
+	printf("\nDone\n----\n");
+}
+
 int					create_tokens_list(char *input, t_token **tokens)
 {
 	t_elem			elem;
@@ -49,32 +64,8 @@ int					create_tokens_list(char *input, t_token **tokens)
 			return (ERROR);
 		input += elem.size;
 	}
+	display_tokens(tokens);
 	if (!tok_join_words(tokens))
 		return (ERROR);
 	return (SUCCESS);
 }
-/*
-int					main(void)
-{
-	t_token			*tokens;
-	t_token			*temp;
-	char			*input;
-	const char		*types[12] = {"pip", "in", "out", "append_out", "word",
-													"space", "v_env", "end"};
-
-	while (get_next_line(0, &input) == 1)
-	{
-		create_tokens_list(input, &tokens);
-		temp = tokens;
-		while (temp)
-		{
-			printf("str : \"%s\"    type : %s\n", temp->str, types[temp->type]);
-			temp = temp->next;
-		}
-		printf("\nDone\n\n");
-		free(input);
-		check_syntax(tokens);
-		tok_lstclear(&tokens);
-		//exit(0);
-	}
-}*/
