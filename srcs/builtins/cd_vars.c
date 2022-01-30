@@ -12,22 +12,41 @@
 
 #include "../../includes/minishell.h"
 
-int		ft_env(char **args)
+char		*get_path_from_env(char car_path)
 {
-	int		i;
-	int		len;
+	char	*path_from_env;
+	char	*path_name;
 
-	(void)args;
-	i = 0;
-	while (g_sh.env[i])
+	if (car_path == '-')
+		path_name = "OLDPWD";
+	else if (car_path == '~')
+		path_name = "HOME";
+	else
+		return (NULL);
+	if (!(path_from_env = ft_getenv(path_name)))
 	{
-		len = get_len_name(g_sh.env[i]);
-		if (g_sh.env[i][len] == '=')
-		{
-			ft_putstr_fd(g_sh.env[i], STDOUT_FILENO);
-			ft_putstr_fd("\n", STDOUT_FILENO);
-		}
-		i++;
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(path_name, STDERR_FILENO);
+		ft_putstr_fd(" not set\n", STDERR_FILENO);
+		return (NULL);
 	}
-	return (STATUS_SUCCESS);
+	if (!(path_from_env = ft_strdup(path_from_env)))
+		return (NULL);
+	return (path_from_env);
+}
+
+void		set_path_in_env(char *new_pwd, char **oldpwd, char **pwd)
+{
+	char	*temp;
+
+	*oldpwd = ft_strdup(ft_getenv("PWD"));
+	*pwd = getcwd(NULL, 0);
+	if (!*oldpwd || !*pwd)
+		return ;
+	if (!ft_strncmp("//", new_pwd, 2) && ft_strncmp("///", new_pwd, 3))
+	{
+		temp = *pwd;
+		*pwd = ft_strjoin("/", temp);
+		free(temp);
+	}
 }

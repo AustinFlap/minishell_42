@@ -12,29 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-char		*get_path_from_env(char car_path)
-{
-	char	*path_from_env;
-	char	*path_name;
-
-	if (car_path == '-')
-		path_name = "OLDPWD";
-	else if (car_path == '~')
-		path_name = "HOME";
-	else
-		return (NULL);
-	if (!(path_from_env = ft_getenv(path_name)))
-	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		ft_putstr_fd(path_name, STDERR_FILENO);
-		ft_putstr_fd(" not set\n", STDERR_FILENO);
-		return (NULL);
-	}
-	if (!(path_from_env = ft_strdup(path_from_env)))
-		return (NULL);
-	return (path_from_env);
-}
-
 char		*get_new_pwd(char *arg)
 {
 	char	*from_home;
@@ -62,35 +39,41 @@ char		*get_new_pwd(char *arg)
 	return (result);
 }
 
-void		change_directory(char *new_pwd, char *arg)
+int			change_directory(char *new_pwd, char *arg)
 {
 	char	*oldpwd;
 	char	*pwd;
+	int		status;
 
 	if (chdir(new_pwd) == -1)
 	{
-		g_sh.status = STATUS_FAILURE_BUILTIN;
 		error("cd", arg);
+		return (STATUS_FAILURE);
 	}
-	else
+	set_path_in_env(new_pwd, &oldpwd, &pwd);
+	status = STATUS_SUCCESS;
+	if (oldpwd && pwd)
 	{
-		g_sh.status = STATUS_SUCCESS;
-		if (!(oldpwd = ft_strdup(ft_getenv("PWD"))))
-			return ;
-		if (!(pwd = getcwd(NULL, 0)))
-			return ;
 		set_env_var("OLDPWD", oldpwd);
 		set_env_var("PWD", pwd);
-		free(oldpwd);
-		free(pwd);
 	}
+	else
+		status = STATUS_FAILURE;
+	if (oldpwd)
+		free(oldpwd);
+	if (pwd)
+		free(pwd);
+	return (status);
 }
 
-void		manage_cd(char *arg, int size)
+int			manage_cd(char *arg, int size)
 {
 	char	*new_pwd;
+	int		status;
 
-	if (!ft_strcmp("-", arg))
+	if (!size)
+		new_pwd = get_path_from_env('~');
+	else if (!ft_strcmp("-", arg))
 	{
 		if ((new_pwd = get_path_from_env('-')))
 		{
@@ -98,26 +81,29 @@ void		manage_cd(char *arg, int size)
 			ft_putstr_fd("\n", STDOUT_FILENO);
 		}
 	}
-	else if (size)
-		new_pwd = get_new_pwd(arg);
 	else
-		new_pwd = get_path_from_env('~');
+		new_pwd = get_new_pwd(arg);
 	if (!new_pwd)
-		return ;
-	change_directory(new_pwd, arg);
+		return (STATUS_FAILURE);
+	status = change_directory(new_pwd, arg);
 	free(new_pwd);
+	return (status);
 }
 
-void		ft_cd(char **args)
+int			ft_cd(char **args)
 {
 	int		size;
+	int		status;
 
 	size = get_array_size(args) - 1;
 	if (size > 1)
 	{
-		g_sh.status = STATUS_FAILURE_BUILTIN;
-		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		status = error_from_builtin("cd:", " too many arguments\n",
+													STATUS_FAILURE);
+		return (status);
 	}
-	else
-		manage_cd(args[size], size);
+	if (size)
+		if (!ft_strlen(args[1]))
+			return (STATUS_SUCCESS);
+	return (manage_cd(args[size], size));
 }

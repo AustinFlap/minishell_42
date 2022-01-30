@@ -6,7 +6,7 @@
 /*   By: tlecoeuv <tlecoeuv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/05 16:09:23 by tlecoeuv          #+#    #+#             */
-/*   Updated: 2020/10/21 15:30:00 by tlecoeuv         ###   ########.fr       */
+/*   Updated: 2020/11/30 20:55:53 by tanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <sys/types.h>
 
 int					ft_isalnum(int c);
+int					ft_isdigit(int c);
+int					ft_isspace(int c);
 int					ft_strcmp(const char *s1, const char *s2);
 int					ft_strlen(const char *s1);
 char				**ft_split(char const *s, char c);
@@ -34,8 +36,8 @@ int					get_len_valid_identifier(char *str);
 char				*ft_strtrim(char const *s1, char const *set);
 void				ft_putstr_fd(char *s, int fd);
 void				manage_env_path();
-
-//temporaire
+char				*ft_itoa(int n);
 int					ft_atoi(const char *str);
+int					get_input(char **input);
 
 #endif

@@ -19,13 +19,17 @@ int			get_tok_doll(char *input, t_elem *elem,
 
 	if (elem->size == 1)
 	{
-		if (!(str = ft_strdup("$")))
+		if (input[1] == '\"' || input[1] == '\'')
+		{
+			if (!(str = ft_strdup("")))
+				return (ERROR);
+		}
+		else if (!(str = ft_strdup("$")))
 			return (ERROR);
 		elem->name = none;
 	}
-	else
-		if (!(str = ft_substr(input, 1, elem->size - 1)))
-			return (ERROR);
+	else if (!(str = ft_substr(input, 1, elem->size - 1)))
+		return (ERROR);
 	if (!(append_token(tokens, str, elem_to_type[elem->name])))
 		return (ERROR);
 	return (SUCCESS);

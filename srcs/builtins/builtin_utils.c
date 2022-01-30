@@ -6,13 +6,13 @@
 /*   By: tlecoeuv <tlecoeuv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 11:24:07 by tlecoeuv          #+#    #+#             */
-/*   Updated: 2020/10/30 14:56:25 by tanguy           ###   ########.fr       */
+/*   Updated: 2020/11/19 11:35:22 by tanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		is_builtin(char	*str)
+int				is_builtin(char *str)
 {
 	int			i;
 	const char	*builtin_str[] = {"cd", "exit", "pwd", "env", "export",
@@ -28,16 +28,16 @@ int		is_builtin(char	*str)
 	return (0);
 }
 
-void	exec_builtin(t_cmd *cmd)
+void			exec_builtin(t_cmd *cmd)
 {
 	int			i;
 	const char	*builtin_str[] = {"cd", "exit", "pwd", "env", "export",
 															"unset", "echo"};
-	void		(*builtin_func[7])(char **);
+	int			(*builtin_func[7])(char **);
 	int			save_stdin;
 	int			save_stdout;
 
-	i = 0;
+	i = -1;
 	builtin_func[0] = &ft_cd;
 	builtin_func[1] = &ft_exit;
 	builtin_func[2] = &ft_pwd;
@@ -45,16 +45,12 @@ void	exec_builtin(t_cmd *cmd)
 	builtin_func[4] = &ft_export;
 	builtin_func[5] = &ft_unset;
 	builtin_func[6] = &ft_echo;
-
 	builtin_redir(cmd->in_fd, cmd->out_fd, &save_stdin, &save_stdout);
-	while (i < 7)
-	{
+	while (++i < 7)
 		if (ft_strcmp(builtin_str[i], cmd->args[0]) == 0)
 		{
-			builtin_func[i](cmd->args);
+			g_sh.status = builtin_func[i](cmd->args);
 			break ;
 		}
-		i++;
-	}
 	restore_savefd(cmd->in_fd, cmd->out_fd, save_stdin, save_stdout);
 }

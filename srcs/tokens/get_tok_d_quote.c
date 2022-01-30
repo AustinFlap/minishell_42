@@ -12,7 +12,19 @@
 
 #include "../../includes/minishell.h"
 
-int				get_tok_d_quote(char *input, t_elem *elem,
+int				doll_in_d_quote(char *input, t_elem *current,
+								const t_type *elem_to_type, t_token **tokens)
+{
+	int		ret;
+	t_token	*last;
+
+	ret = get_tok_doll(input, current, elem_to_type, tokens);
+	last = tok_lstlast(*tokens);
+	last->retokenise = 0;
+	return (ret);
+}
+
+int				d_quote_manage(char *input, t_elem *elem,
 								const t_type *elem_to_type, t_token **tokens)
 {
 	int			len;
@@ -21,15 +33,15 @@ int				get_tok_d_quote(char *input, t_elem *elem,
 
 	len = 1;
 	current.str = elem->str;
-	printf("%c\n", input[elem->size - 1]);
-	while (len <= (elem->size - 1 -(input[elem->size - 1] == '"')))
+	ret = SUCCESS;
+	while (len < (elem->size - (input[elem->size - 1] == '"')) && ret)
 	{
 		current.name = get_elem_name(&input[len], &current);
 		current.size = get_elem_size(&input[len], &current);
 		if (current.name == bs)
 			ret = get_tok_bs(&input[len], elem, elem_to_type, tokens);
 		else if (current.name == doll)
-			ret = get_tok_doll(&input[len], &current, elem_to_type, tokens);
+			ret = doll_in_d_quote(&input[len], &current, elem_to_type, tokens);
 		else
 		{
 			if (current.size >= (elem->size - len))
@@ -37,9 +49,30 @@ int				get_tok_d_quote(char *input, t_elem *elem,
 			current.name = none;
 			ret = get_tok_word(&input[len], &current, elem_to_type, tokens);
 		}
-		if (ret == ERROR)
-			return (ERROR);
 		len += current.size;
+	}
+	return (ret);
+}
+
+int				get_tok_d_quote(char *input, t_elem *elem,
+								const t_type *elem_to_type, t_token **tokens)
+{
+	char		*str;
+
+	if (elem->size < 3)
+	{
+		if (!(str = ft_strdup("")))
+			return (ERROR);
+		if (!(append_token(tokens, str, word)))
+		{
+			free(str);
+			return (ERROR);
+		}
+	}
+	else
+	{
+		if (d_quote_manage(input, elem, elem_to_type, tokens) == ERROR)
+			return (ERROR);
 	}
 	return (SUCCESS);
 }

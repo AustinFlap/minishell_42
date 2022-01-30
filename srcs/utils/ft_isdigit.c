@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlecoeuv <tlecoeuv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tanguy <tanguy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/19 14:12:41 by tlecoeuv          #+#    #+#             */
-/*   Updated: 2020/10/28 17:08:42 by tlecoeuv         ###   ########.fr       */
+/*   Created: 2020/11/12 10:49:38 by tanguy            #+#    #+#             */
+/*   Updated: 2020/11/12 10:49:55 by tanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-int		ft_pwd(char **args)
+int	ft_isdigit(int c)
 {
-	(void)args;
-	ft_putstr_fd(ft_getenv("PWD"), STDOUT_FILENO);
-	ft_putstr_fd("\n", STDOUT_FILENO);
-	return (STATUS_SUCCESS);
+	if (c >= 48 && c <= 57)
+		return (1);
+	return (0);
 }

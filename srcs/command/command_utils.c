@@ -6,34 +6,11 @@
 /*   By: tanguy <tanguy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 09:43:49 by tanguy            #+#    #+#             */
-/*   Updated: 2020/11/02 17:58:52 by tanguy           ###   ########.fr       */
+/*   Updated: 2020/11/17 10:38:05 by tanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void		interpret_v_env(t_token *lst_token)
-{
-	char	*env_value;
-	t_token	*tmp;
-
-	tmp = lst_token;
-	while (tmp && tmp->type != end)
-	{
-		if (tmp->type == v_env)
-		{
-			env_value = ft_getenv(tmp->str);
-			free(tmp->str);
-			if (env_value)
-				tmp->str = ft_strdup(env_value);
-			else
-				tmp->str = ft_strdup("");
-			tmp->type = word;
-		}
-		tmp = tmp->next;
-	}
-	tok_join_words(&lst_token);
-}
 
 void		delete_cmd_spaces(t_token *lst_token)
 {
@@ -76,10 +53,12 @@ int			get_size_args(t_token *lst_token)
 	return (size);
 }
 
-int		get_nb_commands(t_token *lst_token)
+int			get_nb_commands(t_token *lst_token)
 {
 	int		size;
 
+	if (!lst_token)
+		return (0);
 	size = 1;
 	while (lst_token && lst_token->type != end)
 	{
@@ -87,7 +66,7 @@ int		get_nb_commands(t_token *lst_token)
 			size++;
 		lst_token = lst_token->next;
 	}
-	return(size);
+	return (size);
 }
 
 void		free_commands(t_cmd **cmds)
@@ -95,9 +74,11 @@ void		free_commands(t_cmd **cmds)
 	int		i;
 
 	i = 0;
-	while(cmds[i])
+	while (cmds[i])
 	{
 		free_array(cmds[i]->args);
+		free(cmds[i]->bin_path);
+		free(cmds[i]);
+		i++;
 	}
-	free(cmds);
 }

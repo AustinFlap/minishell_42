@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void		ft_echo(char **args)
+int		ft_echo(char **args)
 {
 	int		i;
 	int		new_line;
@@ -26,7 +26,7 @@ void		ft_echo(char **args)
 		i++;
 		while (++i < size)
 		{
-			if (!ft_strcmp(args[i], "-n"))
+			if (!ft_strcmp(args[i], "-n") && i == 1)
 				new_line = 0;
 			else
 			{
@@ -38,4 +38,5 @@ void		ft_echo(char **args)
 	}
 	if (new_line)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	return (STATUS_SUCCESS);
 }

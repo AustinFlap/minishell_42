@@ -9,6 +9,7 @@ RM = rm -rf
 SRCS = 	srcs/main.c \
 		srcs/builtins/builtin_utils.c \
 		srcs/builtins/cd.c \
+		srcs/builtins/cd_vars.c \
 		srcs/builtins/exit.c \
 		srcs/builtins/pwd.c \
 		srcs/env/env_utils.c \
@@ -16,10 +17,13 @@ SRCS = 	srcs/main.c \
 		srcs/error/error.c \
 		srcs/command/handle_tokens.c \
 		srcs/command/get_commands.c \
+		srcs/command/interpret_v_env.c \
 		srcs/command/command_utils.c \
 		srcs/command/handle_commands.c \
 		srcs/command/handle_command_no_pipe.c \
 		srcs/command/path.c \
+		srcs/command/path_utils.c \
+		srcs/signals/signals.c \
 		srcs/redirection/do_redirection.c \
 		srcs/redirection/get_redirection.c \
 		srcs/redirection/redirection_builtins.c \
@@ -56,10 +60,14 @@ SRCS = 	srcs/main.c \
 		srcs/tokens/token_list_utils/tok_lstmap.c \
 		srcs/tokens/token_list_utils/tok_lstnew.c \
 		srcs/tokens/token_list_utils/tok_lstsize.c \
+		srcs/tokens/token_list_utils/insert_lst_token.c \
 		srcs/utils/free_array.c \
 		srcs/utils/ft_atoi.c \
 		srcs/utils/ft_calloc.c \
 		srcs/utils/ft_isalnum.c \
+		srcs/utils/ft_isdigit.c \
+		srcs/utils/ft_isspace.c \
+		srcs/utils/ft_itoa.c \
 		srcs/utils/ft_putstr_fd.c \
 		srcs/utils/ft_split.c \
 		srcs/utils/ft_strcat.c \
@@ -74,10 +82,12 @@ SRCS = 	srcs/main.c \
 		srcs/utils/ft_substr.c \
 		srcs/utils/get_array_size.c \
 		srcs/utils/valid_identifier.c \
+		srcs/utils/get_input.c \
 		srcs/builtins/env.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/export.c \
-		srcs/builtins/echo.c
+		srcs/builtins/echo.c \
+		srcs/tokens/retokenise_vars.c
 
 OBJ = $(SRCS:%.c=%.o)
 

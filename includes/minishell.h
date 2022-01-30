@@ -6,14 +6,13 @@
 /*   By: avieira <avieira@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 16:20:59 by avieira           #+#    #+#             */
-/*   Updated: 2020/11/05 10:08:19 by tanguy           ###   ########.fr       */
+/*   Updated: 2020/11/23 12:40:53 by tanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//LIBRAIRES
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/types.h>
@@ -22,20 +21,18 @@
 # include <string.h>
 # include <errno.h>
 # include <fcntl.h>
-
-//LIBRAIRIES A SUPPRIMER
+# include <limits.h>
 # include <stdio.h>
-
-//HEADERS PERSONELS
 # include "token.h"
 # include "syntax.h"
 # include "get_next_line.h"
 # include "command.h"
 # include "utils.h"
 # include "env.h"
-# include "bultins.h"
+# include "builtins.h"
 # include "error.h"
 # include "redirection.h"
+# include "signals.h"
 
 typedef struct	s_shell
 {
@@ -46,5 +43,6 @@ typedef struct	s_shell
 }				t_shell;
 
 extern t_shell	g_sh;
+extern t_sig	g_sig;
 
 #endif

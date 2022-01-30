@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlecoeuv <tlecoeuv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tanguy <tanguy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/19 14:12:41 by tlecoeuv          #+#    #+#             */
-/*   Updated: 2020/10/28 17:08:42 by tlecoeuv         ###   ########.fr       */
+/*   Created: 2020/11/07 00:27:25 by tanguy            #+#    #+#             */
+/*   Updated: 2020/11/15 10:50:23 by tanguy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-int		ft_pwd(char **args)
+typedef struct	s_sig
 {
-	(void)args;
-	ft_putstr_fd(ft_getenv("PWD"), STDOUT_FILENO);
-	ft_putstr_fd("\n", STDOUT_FILENO);
-	return (STATUS_SUCCESS);
-}
+	int			sigint;
+	int			sigquit;
+	pid_t		pid;
+}				t_sig;
+
+void			handle_sigint(int code);
+void			handle_sigquit(int code);
+void			reset_sig(void);
+
+#endif
